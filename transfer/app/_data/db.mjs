@@ -1,24 +1,40 @@
-const mongoose = require('mongoose')
+import mongoose from "mongoose";
 
-// users
-// have a user name and password
-// as well as associated metadata
-const User = new mongoose.Schema({
-  username: String,
-  password: String, // this will be hashsed 
-  metadataID: String, // this will provide a reference to user meta data
-});
+global.mongoose = {
+  conn: null,
+  promise: null,
+};
 
+export async function dbConnect() {
+  try {
+    if (global.mongoose && global.mongoose.conn) {
+      console.log("Connected from previous");
+      return global.mongoose.conn;
+    } else {
+      const conString = process.env.DATABASE;
 
-// the metaData associated with a user
-// that users id
-// their points that theyve earned
-// their current streak
-// and the friends they interact with
-const MetaData = new mongoose.Schema({
-  userid: {type: String, required: true},
-  points: {type: Number, default: 0, required: true},
-  streak: {type: Number, default: 0, required: true},
-  friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'List'}]
-  
-});
+      const promise = mongoose.connect(conString, {
+        autoIndex: true,
+      });
+
+      global.mongoose = {
+        conn: await promise,
+        promise,
+      };
+
+      console.log("Newly connected");
+      return await promise;
+    }
+  } catch (error) {
+    console.error("Error connecting to the database:", error);
+    throw new Error("Database connection failed");
+  }
+}
+
+export const disconnect = () => {
+  if (!global.mongoose.conn) {
+    return;
+  }
+  global.mongoose.conn = null;
+  mongoose.disconnect();
+};
