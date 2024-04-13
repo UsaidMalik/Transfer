@@ -17,7 +17,7 @@ export default  function Page( { params }: { params: { username: string } } ) {
             setUsername(data.username);
         }
         fetchData();
-    }, [userID]);
+    }, [userID]); // from bing chat
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -30,7 +30,7 @@ export default  function Page( { params }: { params: { username: string } } ) {
         if (res.ok) {
             setUsername(newUserName);
         }
-    }
+    } // got this from bing chat
 
     return (
         <div>

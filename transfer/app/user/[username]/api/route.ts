@@ -5,7 +5,7 @@ export const maxDuration = 10;
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
-const uri = process.env.DATABASE
+const uri = process.env.MONGODB_URI
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -27,7 +27,7 @@ export async function POST(
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
- 
+    // from mongodb docs
     const db = client.db('Transfer'); // replace with your database name
     const collection = db.collection('Users'); // replace with your collection name
   
