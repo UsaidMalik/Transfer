@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react"
 
-export async function getData(userID:string) {
+async function getData(userID:string) {
     const res = await fetch(`https://transfer-sand.vercel.app/user/${userID}/api`)
     if (!res.ok) return "ERRROR";
     return res.json()
