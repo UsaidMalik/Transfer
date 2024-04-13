@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+export const maxDuration = 300;
+
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const uri = process.env.DATABASE
