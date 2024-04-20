@@ -7,7 +7,7 @@ const Homepage = async () => {
   const session = await getSession()
 
   if(!session.isLoggedIn){
-    redirect("/login")
+    redirect("/signup")
   }
   const username = session.username;
   return (
