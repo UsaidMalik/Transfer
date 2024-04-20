@@ -8,11 +8,28 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
+      forms: (theme) => ({
+        custom: {
+          'input, textarea': {
+            '&::placeholder': {
+              color: theme('colors.gray.500'),
+              opacity: '1',
+            },
+            '&:focus': {
+              borderColor: theme('colors.blue.500'),
+              boxShadow: theme('boxShadow.outline'),
+            },
+          },
+          'input[type="submit"]': {
+            backgroundColor: theme('colors.black'),
+            color: theme('colors.white'),
+            fontWeight: theme('fontWeight.bold'),
+            '&:hover': {
+              backgroundColor: theme('colors.green.500'),
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [],

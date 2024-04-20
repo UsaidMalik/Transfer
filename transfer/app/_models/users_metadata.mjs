@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { type } from "os";
+import { string } from "zod";
   
   // the metaData associated with a user
   // that users id
@@ -9,7 +11,7 @@ import mongoose from "mongoose";
     userid: {type: String, required: true},
     points: {type: Number, default: 0, required: true},
     streak: {type: Number, default: 0, required: true},
-    friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'List'}]
+    friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'List'}],
   });
 
 export default mongoose.Model("User-Metadata", MetaData)
