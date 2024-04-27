@@ -16,7 +16,6 @@ export const getSession = async () => {
   if (!session.isLoggedIn) {
     session.isLoggedIn = defaultSession.isLoggedIn;
   }
-
   // CHECK THE USER IN THE DB
   return session;
 };
@@ -50,7 +49,7 @@ export const login = async (
     }
 
 
-    const user = await db.collection("Users").findOne({username: username});
+    const user = await db.collection("Users").findOne({username: username});    
     if (!user){
         return {
                 error: "Username DOESNT exist"
@@ -64,9 +63,16 @@ export const login = async (
       };
     }
 
+  const userMetadata = await db.collection("Users-Metadata").findOne({userId: user._id})
+
   session.userId = user._id.toString();
   session.username = username;
   session.isLoggedIn = true;
+
+  session.friends = userMetadata?.friends ?? []
+  session.score = userMetadata?.score ?? 0
+  session.streak = userMetadata?.streak ?? 0
+  session.languages = userMetadata?.languages ?? {}
 
   await session.save();
   redirect("/");
@@ -94,6 +100,27 @@ export const changeUsername = async (
   }
 
   session.username = newUsername
+  await session.save();
+  revalidatePath("/");
+};
+
+export const addLanguage = async (
+  prevState: { error: undefined | string },
+  formData: FormData
+) => {
+  const session = await getSession();
+
+  const origin = formData.get("origin") as string;
+  const destination = formData.get("destination") as string;
+  await db.collection('Users-Metadata').updateOne(
+    { userId: new ObjectId(session.userId) },
+    { $set: { [origin]: destination } }
+  );
+
+  if (session.languages) {
+    session.languages[origin] = destination;
+    await session.save();
+  }
   await session.save();
   revalidatePath("/");
 };
@@ -148,13 +175,55 @@ export const signup = async (
         hashed_password: hashedPassword
         });
         console.log("SUCCESFULLY CREATED USER")
+        db.collection("Users-Metadata").insertOne(
+          {userId: userId, 
+           score: 0,
+           streak: 0,
+           friends: []
+          }
+      )
+
     }
 
   session.userId = userId.toString();
   session.username = username;
   session.isLoggedIn = true;
+  session.score = 0;
+  session.streak = 0;
+  session.friends = [];
+  session.languages = {};
 
   await session.save();
   redirect("/");
 };
 
+
+
+export async function addFriend (
+  prevState: { error: undefined | string },
+  formData: FormData) {
+    const session = await getSession();
+    const userMetadata = await db.collection("Users-Metadata").findOne({userId: new ObjectId(session.userId)})
+    const friendName = formData.get('friendName') as string;
+
+    if (userMetadata) {
+      const userFriends = userMetadata.friends
+      if (friendName === session.username){
+        return {error: "Cand Add Yourself"}
+      } else if (userFriends.includes(friendName)){
+        return {error: "Already added friend"}
+      }
+
+      await db.collection('Users-Metadata').updateOne(
+        { userId: new ObjectId(session.userId) },
+        { $push: { friends: friendName } }
+      );
+      console.log("saved friends well")
+      session?.friends.push(friendName);
+      if (session.save) {
+        await session.save();
+      }
+    }
+    revalidatePath("/friends");
+    
+};

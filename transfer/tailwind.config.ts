@@ -8,7 +8,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      forms: (theme : any) => ({
+      forms: (theme) => ({
         custom: {
           'input, textarea': {
             '&::placeholder': {

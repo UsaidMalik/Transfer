@@ -3,7 +3,11 @@ import { SessionOptions } from "iron-session";
 export interface SessionData {
   userId?:string;
   username?:string;
+  streak?: number,
+  score?: number,
   isLoggedIn:boolean
+  friends?: string[],
+  languages: { [key:string]: string};
 }
 
 export const defaultSession:SessionData = {

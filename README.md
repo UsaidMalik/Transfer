@@ -37,13 +37,13 @@ An Example of some metadata associated with a user
 
 ## Wireframes
 
-/user/home - The home page a user will see when they register (top)<br>
+/ - The home page a user will see when they register (top)<br>
 /leaderboard - The leaderboard of the top users for the day (bottom)
 
 ![user & leaderboard](documentation/IMG_2583.JPG)
 
-/user/friends -The page where a user can view their friends and the points they have (top)<br>
-/user/learn/languageslug?originlang - the page where a user starts learning the language (bottom)
+/friends -The page where a user can view their friends and the points they have (top)<br>
+/learn/languageslug?originlang - the page where a user starts learning the language (bottom)
 
 ![user friends and learning page](documentation/IMG_2584.JPG)
 
@@ -65,8 +65,8 @@ An Example of some metadata associated with a user
 
 * (2 points) Tailwind CSS
     * I'm going to use Tailwind CSS for styling the project with decent configuration.
-* (3 points) Display graphs with d3.js 
-    * Using d3.js I will display the leaderboard and points of different users per day.
+* (3 points) Authenticate Users With Sessions & Email
+    * This was extremeley difficult to implement with next JS and I'd give it more points if i could.
 * (5 points) Next.js & TypeScript
     * I'm going to be using Next.js as a framework for building the project alongside TypeScript. Since Next.js is fast and efficient and doing it well is moderately difficult I've given it 5 points.
 
